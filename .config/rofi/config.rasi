@@ -1,0 +1,43 @@
+
+@theme "/usr/share/rofi/themes/solarized.rasi"
+* {
+    font: "Terminess Nerd Font Mono Semibold 15";
+}
+configuration {
+    modi: "window,drun,ssh,combi";
+    combi-modi: "window,drun,ssh";
+    show-icons: true;
+    color: rgba(131, 147, 149, 1);
+}
+window {
+    color: rgba(131, 147, 149, 1);
+    width: 25%;
+    height: 20%;
+    transparency: "real";
+    background-color:            rgba ( 0, 0, 0, 42% );
+    border-color: rgba(41, 162, 152, 0.42);
+}
+listview {
+    background-color: rgba ( 0, 0, 0, 42% );
+    scrollbar: false;
+}
+mainbox {
+    background-color: rgba ( 0, 0, 0, 42% );    
+}
+element-text {
+    padding: 0 0 0 4px;
+    text-color: rgba ( 131, 147, 149, 100 % );
+}
+element.selected.normal {    
+    background-color: rgba ( 25, 75, 125, 42% );
+}
+element.normal.normal {    
+    background-color: rgba ( 0, 0, 0, 0 % );
+}
+element.alternate.normal {
+    background-color: rgba ( 0, 0, 0, 0 % );
+}
+element.alternate.active {
+    background-color: rgba ( 0, 0, 0, 0 % );
+}
+

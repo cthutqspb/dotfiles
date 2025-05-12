@@ -1,0 +1,505 @@
+/*@define-color background-color rgba(0,0,0,.7);
+@define-color text-color #dee1f0;
+@define-color text-color-2 #9E9ECB;
+@define-color text-hover-color #477AB3;
+@define-color text-highlight-color #969cb3;
+@define-color border-color #c08a2f;
+@define-color image-color color3;
+@define-color image-color-2 #BF4D80;
+@define-color text-title-color #969cb3;*/
+@define-color background-color #141414;
+/*foreground            #969cb3
+cursor                #969cb3
+selection_background  #5e6686
+color0                #202745
+color8                #6a7394
+color1                #c84821
+color9                #c76a28
+color2                #ab9639*/
+/*color12               #898ea3
+color5                #6678cc*/
+/*color14               #9c6279*/
+/*color15               #f4f7ff
+selection_foreground #202745*/
+/*XFCE-PANEL*/
+
+/*palette = 0=#141414
+palette = 1=#ff5555
+palette = 2=#98ec65
+palette = 3=#ffcc33
+palette = 4=#00aaff
+palette = 5=#aa88ff
+palette = 6=#88ddff
+palette = 7=#cccccc
+palette = 8=#414141
+palette = 9=#ff8888
+palette = 10=#b6f292
+palette = 11=#ffd966
+palette = 12=#33bbff
+palette = 13=#cebbff
+palette = 14=#bbecff
+palette = 15=#ffffff
+background = #111111
+foreground = #777777
+cursor-color = #fcdc08
+cursor-text = #161616
+selection-background = #666666
+selection-foreground = #ffffff
+*/
+/* Atelier Sulph*/
+@define-color menu-text-color #cccccc;
+@define-color menu-text-hover-color #88ddff;
+@define-color menu-text-highlight-color #414141;
+
+@define-color text-hover-color #cccccc;
+@define-color image-color #88ddff;
+@define-color text-highlight-color #414141;
+@define-color border-color #414141;
+@define-color text-color-2 #00aaff;
+@define-color text-title-color #cccccc;
+@define-color text-color #cccccc;
+
+/* Toy Chest
+@define-color text-hover-color             #283256;
+@define-color image-color                #325d96;
+@define-color text-highlight-color               #5e6686;
+@define-color border-color                 #35a08f;
+@define-color text-color-2              #dee1f0;
+@define-color text-title-color                #35a08f;
+@define-color text-color           #23d082; */
+#pulseaudio-button {
+  color: @text-color-2;
+}
+
+#clock-button {
+  color: #ffcc33;
+}
+
+#xfce4-notification-plugin {
+  color: @text-color-2;
+}
+
+#xfce4-xkb-plugin {
+  color: @text-color-2;
+}
+
+/***************************/
+
+headerbar,
+headerbar:backdrop {
+  color: @text-color;
+}
+
+menubar,
+menubar:backdrop {
+  background: rgba(20, 20, 20, .64);
+  color: @text-color;
+  border-bottom: @border-color;
+}
+
+menubar menuitem menuitem {
+  color: @menu-text-color;
+}
+
+menubar menuitem:hover {
+  color: @menu-text-hover-color;
+  background: @menu-text-highlight-color;
+}
+
+menubar menuitem menuitem:hover {
+  color: @menu-text-hover-color;
+  background: @menu-text-highlight-color;
+}
+
+/*THUNAR*/
+
+.thunar {
+  font-family: "Terminess Nerd Font Mono";
+  font-size: 16px;
+  letter-spacing: 0.9px;
+}
+
+headerbar,
+headerbar:backdrop {
+  color: @text-color;
+}
+
+.thunar treeview {
+  background: rgba(20, 20, 20, .64);
+}
+
+.thunar {
+  background: transparent;
+}
+
+.thunar header,
+.thunar tabs {}
+
+.thunar header {
+  background: rgba(20, 20, 20, .64);
+}
+
+.thunar tabs {
+  background: transparent;
+  border-color: @border-color;
+}
+
+.thunar tabs tab {
+  background: transparent;
+  color: @text-title-color;
+  border: none;
+  font-weight: bold;
+}
+
+.thunar tabs tab:hover {
+  box-shadow: 0px 2px @text-color;
+}
+
+.thunar tabs tab:checked {
+  box-shadow: 0px 2px @text-color;
+}
+
+.thunar tabs tab image {
+  color: @text-color;
+}
+
+.thunar tabs tab:checked image {
+  color: @text-title-color;
+}
+
+.thunar stack {
+  background: transparent;
+}
+
+.thunar toolbar {
+  background: rgba(20, 20, 20, .64);
+}
+
+.thunar toolbar * {
+  color: @text-color;
+}
+
+.thunar toolbar widget widget button {
+  color: @image-color;
+  background-image: none;
+}
+
+.thunar toolbar widget widget button box image {
+  color: @image-color;
+}
+
+.thunar toolbar widget widget button:checked,
+.thunar toolbar widget widget button:hover {
+  background-color: @text-highlight-color;
+}
+
+.thunar toolbar widget widget button:checked box label,
+.thunar toolbar widget widget button:hover box label {
+  color: @text-hover-color;
+}
+
+.thunar toolbar widget widget button:checked box image,
+.thunar toolbar widget widget button:hover box image {
+  color: @text-hover-color;
+}
+
+/*.thunar toolbar widget widget button:checked box label, .thunar toolbar widget widget button:checked box image{
+   color: @text-hover-color;
+   background-color: @text-highlight-color;
+}*/
+
+.thunar toolbar button {
+  border: 1px solid @border-color;
+}
+
+.thunar toolbar entry {
+  border: 1px solid @border-color;
+}
+
+.thunar toolbar entry selection {
+  color: @text-hover-color;
+  background-color: @text-highlight-color;
+}
+
+.thunar toolbar toolbutton image {
+  color: @image-color;
+}
+
+.thunar toolbar image:active {
+  color: @text-title-color;
+}
+
+.thunar toolbar toolbutton button:hover,
+.thunar toolbar toolitem button:hover {
+  color: @image-color;
+  background-color: @text-highlight-color;
+}
+
+.thunar statusbar {
+  background: rgba(20, 20, 20, .64);
+  color: @text-title-color;
+}
+
+.thunar header {
+  border-color: @border-color;
+}
+
+menubar,
+menubar:backdrop {
+  background: rgba(20, 20, 20, .64);
+  color: @text-color;
+  border-bottom: 1px solid @border-color;
+}
+
+
+.thunar .sidebar {
+  background: transparent;
+  border-color: @border-color;
+}
+
+.thunar>grid>paned .sidebar treeview.view {
+  color: @text-title-color;
+  font-weight: normal;
+}
+
+.thunar>grid>paned .sidebar treeview.view:hover,
+.thunar>grid>paned .sidebar treeview.view:hover {
+  background: @text-highlight-color;
+  color: @text-hover-color;
+  font-weight: bold;
+}
+
+.thunar>grid>paned .sidebar treeview.view:selected,
+.thunar>grid>paned .sidebar treeview.view:active {
+  background: @text-highlight-color;
+  color: @text-hover-color;
+  font-weight: bold;
+}
+
+.thunar>grid>paned .view:selected,
+.thunar>grid>paned treeview.view:selected,
+.thunar paned treeview.view:selected,
+.thunar paned .view:selected,
+.thunar .view:selected {
+  background: @menu-text-highlight-color;
+}
+
+.thunar paned>grid {
+  border-top: 1px solid @border-color;
+  border-left: 1px solid @border-color;
+}
+
+.thunar paned>grid paned {
+  border-bottom: 1px solid @border-color;
+}
+
+.thunar paned>grid .view treeview {
+  border-right: 1px solid @border-color;
+}
+
+.thunar paned>grid .view label {
+  color: @text-color;
+}
+
+.thunar paned>grid .view button {
+  background: rgba(20, 20, 20, .64);
+}
+
+.thunar paned>grid .view>treeview {
+  background: rgba(20, 20, 20, .64);
+  color: @text-color;
+}
+
+.thunar paned>grid .view>treeview:hover {
+  color: @text-hover-color;
+  font-weight: bold;
+  background: @text-highlight-color;
+}
+
+.thunar .view * {
+  border-color: @border-color;
+}
+
+.thunar .view:selected {
+  background: @text-highlight-color;
+  color: @text-hover-color;
+}
+
+/*TERMINAL*/
+
+/*#xfce4-panel {
+  background: rgba(32,39,69,.9);
+  background: transparent;
+}*/
+
+
+#xfce4-terminal-notebook header {
+  background: transparent;
+}
+
+#xfce4-terminal-notebook {
+  background: transparent;
+}
+
+#xfce4-terminal-notebook header.top>tabs {
+  background: rgba(20, 20, 20, .32);
+}
+
+#xfce4-terminal-notebook header.top>tabs>tab {
+  min-height: 0;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  color: @text-title-color;
+}
+
+#xfce4-terminal-notebook header.top>tabs>tab:hover {
+  color: @text-hover-color;
+  background: @text-highlight-color;
+}
+
+#xfce4-terminal-notebook header.top>tabs>tab:checked {
+  color: @text-hover-color;
+  background: @text-highlight-color;
+}
+
+#xfce4-terminal-notebook header.top>tabs>tab label {
+  min-height: 0;
+  min-width: 0;
+  padding: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+notebook>header.top button {
+  padding: 0 0 0 0;
+  background-image: none;
+  border: 0;
+  margin-right: 10px;
+}
+
+/*MISC*/
+.content-view {
+  background-color: #e6e3e0;
+  color: @text-color;
+}
+
+.content-view:hover {
+  -gtk-icon-effect: highlight;
+}
+
+.content-view:backdrop {
+  background-color: #e6e3e0;
+}
+
+
+/************ Tooltips * */
+tooltip {
+  padding: 4px;
+  /* not working */
+  border-radius: 5px;
+  box-shadow: none;
+  text-shadow: 0 1px black;
+}
+
+tooltip.background {
+  background-color: rgba(20, 20, 20, .64);
+  background-clip: padding-box;
+  border: 1px solid @border-color;
+}
+
+tooltip decoration {
+  background: rgba(20, 20, 20, .64);
+}
+
+tooltip * {
+  padding: 4px;
+  background: rgba(20, 20, 20, .64);
+  color: white;
+}
+
+/********************* App Notifications * */
+.app-notification,
+.app-notification.frame {
+  padding: 10px;
+  border-radius: 0 0 5px 5px;
+  background-color: rgba(53, 53, 53, 0.9);
+}
+
+.app-notification:backdrop,
+.app-notification.frame:backdrop {
+  background-image: none;
+  transition: 200ms ease-out;
+}
+
+.app-notification border,
+.app-notification.frame border {
+  border: none;
+}
+
+
+/******************/
+
+calendar {
+  color: @text-color;
+  border: 1px solid @border-color;
+}
+
+calendar.header {
+  color: @text-color-2;
+  font-weight: bold;
+  border-bottom-color: @border-color;
+}
+
+calendar.title {
+  color: @text-color-2;
+}
+
+calendar.button:hover {
+  color: @text-hover-color;
+}
+
+
+calendar.highlight {
+  color: @text-title-color;
+  font-weight: bold;
+}
+
+
+calendar.button:disabled {
+  color: @image-color;
+}
+
+#xfce4-xkb-plugin,
+.xfce4-xkb-plugin,
+#xkb,
+.xkb,
+#xfce4-xkb,
+.xfce4-xkb,
+#xkb-plugin,
+.xkb-plugin,
+xkb-plugin {
+  color: @image-color;
+}
+
+/*MENU*/
+window decoration {
+  border: none;
+}
+
+.csd.popup decoration {
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0), 0 0 0 0 rgba(0, 0, 0, 0);
+}
+
+menu {
+  background: rgba(20, 20, 20, .64);
+  font-family: "Terminess Nerd Font Mono Regular";
+}
+
+menu menuitem {
+  color: @menu-text-color;
+}
+
+menu menuitem:hover {
+  color: @menu-hover-color;
+  background: @menu-text-highlight-color;
+}

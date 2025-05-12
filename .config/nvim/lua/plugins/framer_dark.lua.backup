@@ -1,0 +1,11 @@
+return {
+  {
+    "balanceiskey/vim-framer-syntax",
+    lazy = false,
+    priority = 1000,
+
+    config = function()
+      vim.cmd([[colorscheme framer_dark]])           
+    end,  
+  },
+}
