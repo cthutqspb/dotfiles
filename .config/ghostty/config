@@ -1,0 +1,43 @@
+window-theme 			= ghostty			
+window-decoration=false
+window-padding-y = 0
+window-padding-x = 0
+window-padding-color = extend
+window-padding-balance = true
+window-save-state = always
+#fullscreen				= true
+#title					= " "
+theme 					= solarized-osaka-night
+#iceberg-dark
+#Framer
+
+background = #000804
+
+
+background-blur         = true
+background-opacity 		= 0.72
+background-blur-radius 	= 100
+
+#font-family				= 3270 Nerd Font Mono Regular
+#font-family				= Terminess Nerd Font Mono
+font-family				= Hack Nerd Font
+font-family-bold 		= Terminess Nerd Font Mono Bold
+font-family-italic		= Terminess Nerd Font Mono Bold Italic
+font-family-bold-italic	= Terminess Nerd Font Mono font-family-italic
+
+font-size               = 15
+
+#font-thicken = true
+
+#adjust-underline-position 	= -2
+#adjust-font-baseline		= 0
+#adjust-cell-height			= -2
+#adjust-cell-width           = -2
+
+
+adjust-underline-position 	= -2
+adjust-font-baseline		= 2
+adjust-cell-height			= -5
+adjust-cell-width           = -1
+
+keybind = ctrl+shift+r=reload_config

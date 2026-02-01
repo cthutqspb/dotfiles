@@ -1,0 +1,361 @@
+// -*- mode: jsonc -*-
+{
+    "layer": "top", // Waybar at top layer
+    // "position": "bottom", // Waybar position (top|bottom|left|right)
+    "height": 30, // Waybar height (to be removed for auto height)
+    //"width": 1280, // Waybar width
+    "spacing": 4, // Gaps between modules (4px)
+    "output": "DP-1",
+    "margin": "7 8 0 8",
+    // Choose the order of the modules
+    "modules-left": [
+        "hyprland/workspaces"
+        //"cava",
+        //"custom/cava"
+        //"mpd"
+        //"custom/blender",
+        //"custom/substance",
+        //"custom/discord",
+        //"custom/telegram",
+        //"custom/transmission",
+        //"custom/steam"
+    ],
+    "modules-center": [
+        "hyprland/window"
+    ],
+    "modules-right": [
+        //    "mpd",
+        //  "cava",
+        "idle_inhibitor",
+        //"pulseaudio",
+        "pulseaudio#speaker",
+        "pulseaudio#microphone",
+        //  "network",
+        //"cpu",
+        //"memory",
+        //"temperature",
+        // "keyboard-state",
+        "clock",
+        "tray",
+        "hyprland/language",
+        "custom/power"
+    ],
+    // Modules configuration
+    // "sway/workspaces": {
+    //     "disable-scroll": true,
+    //     "all-outputs": true,
+    //     "warp-on-scroll": false,
+    //     "format": "{name}: {icon}",
+    //     "format-icons": {
+    //         "1": "",
+    //         "2": "",
+    //         "3": "",
+    //         "4": "",
+    //         "5": "",
+    //         "urgent": "",
+    //         "focused": "",
+    //         "default": ""
+    //     }
+    // },
+    "hyprland/workspaces": {
+        "sort-by-name": false,
+        "sort-by-number": true,
+        "sort-by-coordinates": false,
+        "format-icons": {
+            "3": "1",
+            "7": "2",
+            //"8": "3",
+            //"9": "4"
+            // "5": "",
+            // 	"active": "",
+            // 	"default": ""
+        },
+        "persistent-workspaces": {
+            //"*": 6,
+            "DP-1": 1
+            //"DP-3": 0,
+            //"DP-2": 1
+            //"*": 5, // 5 workspace by default on every monitor
+            // "HDMI-A-1": 3 // but only three on HDMI-A-1
+        },
+        "all-outputs": true,
+        "on-scroll-up": "hyprctl dispatch workspace e+1",
+        "on-scroll-down": "hyprctl dispatch workspace e-1",
+        /*"format": "[{icon} {windows} ]",*/
+        "format": "[ {windows}  ]",
+        "format-window-separator": "  ",
+        "window-rewrite-default": "",
+        "window-rewrite": {
+            // https://www.nerdfonts.com/cheat-sheet and https://fontawesome.com/icons
+            "class<Alacritty>": "",
+            "class<Pcmanfm>": "",
+            "class<com.github.weclaw1.ImageRoll|nomacs>": "",
+            "title<(.*[$%#] *)?nvim.*>": "",
+            "title<(.*[$%#] *)?([hb]|nv)top.*>": "",
+            "class<firefox>": "",
+            "class<discord>": "",
+            "title<Discord.*>": "",
+            "title<.[0-9]+. Discord.*>": " °",
+            "title<Signal>": "󰍡",
+            "title<WhatsApp.*>": "",
+            "title<.[0-9]+. WhatsApp.*>": "°",
+            "title<(.* - )?(.[0-9]+. )?YouTube.*>": "",
+            "title<.* - Gmail .*>": "󰊫",
+            "class<calibre-.*>": "",
+            "class<mpv>": "",
+            "class<vlc>": "󰕼",
+            "class<Gimp-.*>": "",
+            "class<steam.*>": "󰓓", //  for FontAwesome
+            "class<steam> title<Friends List>": "",
+            "class<steam_app_[0-9]+>": "󰮂",
+            "title<Winetricks.*>": "󰡶",
+            //"class<(Chromium)|(Chrome)>": "aaa"
+            "class<(Chromium)|(Chrome)>": "",
+            "class<(telegram-desktop)|(Telegram)|(telegram)>": "",
+            "class<(conky)": "",
+            "class<(ghostty)": "",
+            "class<(blender)": ""
+        }
+    },
+    "keyboard-state": {
+        "numlock": true,
+        "capslock": true,
+        "format": "{name} {icon}",
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
+        }
+    },
+    "mpd": {
+        "max-length": 32,
+        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
+        "format-disconnected": "Disconnected ",
+        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+        "unknown-tag": "N/A",
+        "interval": 5,
+        "consume-icons": {
+            "on": " "
+        },
+        "random-icons": {
+            "off": "<span color=\"#f53c3c\"></span> ",
+            "on": " "
+        },
+        "repeat-icons": {
+            "on": " "
+        },
+        "single-icons": {
+            "on": "1 "
+        },
+        "state-icons": {
+            "paused": "",
+            "playing": ""
+        },
+        "tooltip-format": "MPD (connected)",
+        "tooltip-format-disconnected": "MPD (disconnected)",
+        "on-click": "mpc play",
+        "on-click-right": "mpc pause",
+        "on-scroll-up": "mpc next",
+        "on-scroll-down": "mpc prev"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "tray": {
+        "icon-size": 20,
+        "spacing": 10,
+        "icons": {
+            "discord": "/path/to/image.png",
+            "telegram-desktop": "/home/trip/.local/share/icons/candy-icons/apps/scalable/telegram.svg"
+        }
+    },
+    "clock": {
+        // "timezone": "America/New_York",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%Y-%m-%d}"
+    },
+    "cpu": {
+        "format": "{usage}% ",
+        "tooltip": false
+    },
+    "memory": {
+        "format": "{}% "
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 80,
+        // "format-critical": "{temperatureC}°C {icon}",
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": [
+            "",
+            "",
+            ""
+        ]
+    },
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi": "{essid} ({signalStrength}%) ",
+        "format-ethernet": "{ipaddr}/{cidr} ",
+        "tooltip-format": "{ifname} via {gwaddr} ",
+        "format-linked": "{ifname} (No IP) ",
+        "format-disconnected": "Disconnected ⚠",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+    },
+    "pulseaudio#speaker": {
+        "format": "{icon} {volume}%",
+        "format-bluetooth": " {icon} {volume}%",
+        "format-bluetooth-muted": "  {volume}%",
+        "format-muted": " {volume}%",
+        "format-icons": {
+            "headphone": "",
+            "default": [
+                "",
+                "",
+                ""
+            ]
+        },
+        "on-click": "pamixer -t",
+        "on-click-right": "pavucontrol -t 3",
+        "on-scroll-up": "pamixer -i 1",
+        "on-scroll-down": "pamixer -d 1"
+    },
+    "pulseaudio#microphone": {
+        "format": "{format_source}",
+        "format-source": " {volume}%",
+        "format-source-muted": " {volume}%",
+        "on-click": "pamixer --source @DEFAULT_SOURCE@ -t",
+        "on-click-right": "pavucontrol -t 4",
+        "on-scroll-up": "pamixer --source @DEFAULT_SOURCE@ -i 1",
+        "on-scroll-down": "pamixer --source @DEFAULT_SOURCE@ -d 1"
+    },
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{volume}% {icon} {format_source}",
+        "format-bluetooth": "{volume}% {icon} {format_source}",
+        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-muted": " {format_source}",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": [
+                "",
+                "",
+                ""
+            ]
+        },
+        "on-click": "pavucontol"
+    },
+    "custom/media": {
+        "format": "{icon} {}",
+        "return-type": "json",
+        "max-length": 40,
+        "format-icons": {
+            "spotify": "",
+            "default": "🎜"
+        },
+        "escape": true,
+        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
+        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+    },
+    "custom/power": {
+        "format": "⏻ ",
+        "tooltip": false,
+        "menu": "on-click",
+        "menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder
+        "menu-actions": {
+            "shutdown": "shutdown",
+            "reboot": "reboot",
+            "suspend": "systemctl suspend",
+            "hibernate": "systemctl hibernate"
+        }
+    },
+    "hyprland/language": {
+        "format": "{}",
+        "format-en": "US",
+        "format-ru": "RU"
+    },
+    "cava": {
+        "min-length": 16,
+        "max-length": 16,
+        "cava_config": "$HOME/.config/cava/config",
+        "framerate": 30,
+        "autosens": 1,
+        //"sensitivity": 100,
+        "bars": 14,
+        "lower_cutoff_freq": 50,
+        "higher_cutoff_freq": 10000,
+        "method": "pipewire",
+        "source": "auto",
+        "stereo": true,
+        "reverse": false,
+        "bar_delimiter": 0,
+        "monstercat": false,
+        "waves": false,
+        "noise_reduction": 0.77,
+        "input_delay": 1,
+        "format-icons": [
+            "▁",
+            "▂",
+            "▃",
+            "▄",
+            "▅",
+            "▆",
+            "▇",
+            "█"
+        ],
+        "actions": {
+            "on-click-right": "mode"
+        }
+    },
+    "custom/cava": {
+        "exec": "sleep 3 && cava -p /home/trip/.config/cava/config| sed -u 's/;//g;s/0/0/g;s/1/1/g;s/2/2/g;s/3/3/g;s/4/4/g;s/5/5/g;s/6/6/g;s/7/7/g;s/8/8/g;s/9/9/g;'"
+    },
+    "hyprland/window": {
+        "max-length": 64,
+        "format": "{}",
+        "rewrite": {
+            "class<chromium>": "!!!!!!$1",
+            "title<.*youtube.*>": "" // Windows whose titles contain "youtube"
+        }
+    },
+    "custom/blender": {
+        "format": " ",
+        "tooltip": "Blender",
+        "on-click": "blender"
+    },
+    "custom/discord": {
+        "format": " ",
+        "tooltip": "discord",
+        "on-click": "discord"
+    },
+    "custom/substance": {
+        "format": " ",
+        "tooltip": "SubstancePainter",
+        "on-click": "/opt/Adobe/Adobe_Substance_3D_Painter/Adobe Substance 3D Painter"
+    },
+    "custom/telegram": {
+        "format": " ",
+        "tooltip": "Telegram",
+        "on-click": "telegram-desktop"
+    },
+    "custom/transmission": {
+        "format": " ",
+        "tooltip": "Transmission",
+        "on-click": "transmission-gtk"
+    },
+    "custom/steam": {
+        "format": " ",
+        "tooltip": "Steam",
+        "on-click": "steam"
+    }
+}

@@ -15,24 +15,26 @@ local config = wezterm.config_builder()
 --tabline.apply_to_config(config)
 -- For example, changing the color scheme:
 
+ --config.color_scheme = 'Teva'
+
 -- config.color_scheme = 'Wryan'
--- config.color_scheme = 'Unikitty Dark (base16)'
-config.color_scheme = "Tokyo Night"
+--  config.color_scheme = 'Unikitty Dark (base16)'
+ config.color_scheme = "Tokyo Night"
 -- config.color_scheme = 'Teva (terminal.sexy)'
 --  config.color_scheme = 'Solarized Dark - Patched'
 -- config.color_scheme = 'Shaman'
 -- config.color_scheme = 'Sea Shells (Gogh)'
--- config.color_scheme = 'Kasugano (terminal.sexy)'
+--  config.color_scheme = 'Kasugano (terminal.sexy)'
 -- config.color_scheme = 'Icy Dark (base16)'
--- config.color_scheme = 'Frontend Galaxy (Gogh)'
+--  config.color_scheme = 'Frontend Galaxy (Gogh)'
 -- config.color_scheme = 'Framer'
--- config.color_scheme = 'ForestBlue'
+--config.color_scheme = 'ForestBlue'
 -- config.color_scheme = 'FarSide (terminal.sexy)'
 --  config.color_scheme = 'Codeschool (dark) (terminal.sexy)'
--- config.color_scheme = 'Cobalt Neon'
--- config.color_scheme = 'carbonfox'
+--  config.color_scheme = 'Cobalt Neon'
+--  config.color_scheme = 'carbonfox'
 -- 'AtelierSulphurpool'
--- config.color_scheme = 'Atelier Sulphurpool (base16)'
+--  config.color_scheme = 'Atelier Sulphurpool (base16)'
 
 -- window_decorations = "RESIZE"
 
@@ -58,7 +60,16 @@ local colors_palette = {
   color_07 = "#aab1d3",
 }
 
-local background_main_color = "rgba: 25 27 38 72%"
+--local background_main_color = "rgba: 25 27 38 72%"
+
+config.colors = {
+    background = '#070707',
+    tab_bar = {
+      background = '#070707',
+  }
+}
+
+local background_main_color = '#070707'
 
 config.front_end = "WebGpu"
 config.animation_fps = 144
@@ -67,14 +78,61 @@ config.window_background_opacity = 0.72
 config.automatically_reload_config = true
 window_background_blur = 30
 
+
 config.font = wezterm.font("Terminess Nerd Font Mono", { weight = "Regular" })
--- config.font = wezterm.font("iMWritingMono Nerd Font Mono", { weight = "Regular" })
---config.font = wezterm.font("Hasklug Nerd Font Mono", { weight = "Regular" })
+config.freetype_render_target = "Light"
+config.freetype_load_target = "Light"
+--config.freetype_load_target = 'HorizontalLcd'
+--config.freetype_render_target = "HorizontalLcd"
+--config.freetype_load_flags = "NO_BITMAP"
+--config.freetype_load_flags = 'FORCE_AUTOHINT'
+config.font_size = 15
+config.line_height = 0.9
+config.cell_width = 1
+--]]
+--[[
+--Cousine Nerd Font Mono
+config.font = wezterm.font("Cousine Nerd Font Mono", { weight = "Regular" })
+-- config.freetype_load_target = 'HorizontalLcd'
+--config.freetype_render_target = "Light"
+--config.freetype_load_target = "Light"
+--config.freetype_load_flags = "NO_BITMAP"
+config.font_size = 14
+config.line_height = 1
+config.cell_width = 0.90
+--]]
+
+
+--[[
+config.font = wezterm.font("Terminus", { weight = "Regular" })
+config.freetype_render_target = "Light"
+config.freetype_load_target = "Light"
+config.font_size = 15
+config.line_height = 0.9
+config.cell_width = 0.90
+--]]
+
+-- config.font = wezterm.font("FiraCode Nerd Font Mono", { weight = "Regular" })
+-- -- config.freetype_render_target = "HorizontalLcd"
+-- config.freetype_load_target = "Light"
+-- config.freetype_load_flags = "NO_HINTING"
+-- config.font_size = 12
+-- config.line_height = 0.9
+-- config.cell_width = 0.9
+
+-- config.font = wezterm.font("IosevkaTerm Nerd Font Mono", { weight = "Regular" })
+-- -- config.freetype_render_target = "HorizontalLcd"
+-- config.freetype_load_target = "Light"
+-- -- config.freetype_load_flags = "NO_HINTING"
+-- config.font_size = 13
+-- config.line_height = 0.72
+-- config.cell_width = 1
+
+-- config.font = wezterm.font("iMWritingQuat Nerd Font Mono", { weight = "Regular" })
+
+-- config.font = wezterm.font("Hack Nerd Font Mono", { weight = "Regular" })
 
 -- config.dpi = 96.0
-config.font_size = 15
-config.line_height = 0.72
-config.cell_width = 0.9
 
 config.show_close_tab_button_in_tabs = false
 config.use_fancy_tab_bar = false

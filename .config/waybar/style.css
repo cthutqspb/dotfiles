@@ -1,0 +1,441 @@
+* {
+  font-family: FontAwesome, Terminess Nerd Font Propo;
+  font-size: 18px;
+  font-weight: normal;
+  /*background: rgba(0, 10, 15, 0.72); */ /* Фиксированный полупрозрачный фон, без динамики */
+}
+
+/* palette = 0=#141414
+palette = 1=#ff5555
+palette = 2=#98ec65
+palette = 3=#ffcc33
+palette = 4=#00aaff
+palette = 5=#aa88ff
+palette = 6=#88ddff
+palette = 7=#cccccc
+palette = 8=#414141
+palette = 9=#ff8888
+palette = 10=#b6f292
+palette = 11=#ffd966
+palette = 12=#33bbff
+palette = 13=#cebbff
+palette = 14=#bbecff
+palette = 15=#ffffff
+background = #111111
+foreground = #777777
+cursor-color = #fcdc08
+cursor-text = #161616
+selection-background = #666666
+selection-foreground = #ffffff */
+
+@define-color color1 rgba(0, 20, 25, 1);
+@define-color color2 rgba(219, 48, 45, 1);
+@define-color color3 rgba(132, 153, 0, 1);
+@define-color color4 rgba(178, 133, 0, 1);
+@define-color color5 rgba(38, 139, 211, 1);
+@define-color color6 rgba(210, 54, 129, 1);
+@define-color color7 rgba(41, 162, 152, 1);
+@define-color color8 rgba(131, 147, 149, 1);
+
+@define-color color9 rgba(38, 139, 211, 1);
+
+
+window#waybar {
+  /* background-color: rgba(0, 20, 25, .72)*/
+  background-color: rgba(0, 10, 15, .92);
+  border: 1px solid rgba(27, 72, 97, 0.72);
+  /* border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
+  transition-property: background-color;
+  transition-duration: .5s;
+  margin: 4 20;
+  padding: 0 12 0 10;
+  margin-top: 10;;
+}
+
+window {
+  margin-top: 10px;
+}
+
+window#waybar.hidden {
+  opacity: 0.2;
+}
+
+/*
+window#waybar.empty {
+    background-color: transparent;
+}
+window#waybar.solo {
+    background-color: #FFFFFF;
+}
+*/
+
+window#waybar.termite {
+  /* background-color: #3F3F3F; */
+}
+
+window#waybar.chromium {
+  /* background-color: #000000; */
+  border: 1px solid @color5;
+  background-color: red;
+  background: url("/home/trip/.local/share/icon/candy-icons/apps/scalable/chromium.svg");
+}
+
+button {
+  /* Use box-shadow instead of border so the text isn't offset */
+  box-shadow: inset 0 -3px transparent;
+  /* Avoid rounded borders under each button name */
+  border: none;
+  border-radius: 0;
+}
+
+/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
+button:hover {
+  /* #background: inherit; */
+  box-shadow: inset 0 -3px #ffffff;
+}
+
+.modules-left,
+.modules-center {
+  /*background: linear-gradient(45deg, rgba(0, 170, 255, 0.27), rgba(170, 136, 255, 0.27));*/
+  /*border-radius: 0.5rem;*/
+  /*padding: 2px;*/
+}
+
+/* you can set a style on hover for any module like this */
+#pulseaudio:hover {}
+
+#workspaces button {
+  padding: 0 2px;
+  margin: 0 6px;
+  color: @color5;
+}
+
+#workspaces button:hover {
+  /*background: @color6;*/
+}
+
+#workspaces button.focused {
+  background-color: @color6;
+  box-shadow: inset 0 -3px @color6;
+}
+
+#workspaces button.urgent {
+  /*background-color: #eb4d4b;*/
+}
+
+#workspaces button.active {
+  box-shadow: inset 0 -2px @color7;
+}
+
+#mode {
+  /*background-color: #64727D;*/
+  box-shadow: inset 0 -1px #ffffff;
+}
+
+#clock,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#network,
+#pulseaudio,
+#wireplumber,
+#custom-media,
+#tray,
+#mode,
+#idle_inhibitor,
+#scratchpad,
+#mpd {
+  padding: 0 10px;
+  color: #ffffff;
+}
+
+#workspaces {
+  padding: 0 0 2px 2px;
+  /*background-color: rgba(38, 139, 211, 0.27);*/
+}
+
+/* If workspaces is the leftmost module, omit left margin */
+.modules-left>widget:first-child>#workspaces {
+  margin-left: 0;
+}
+
+/* If workspaces is the rightmost module, omit right margin */
+.modules-right>widget:last-child>#workspaces {
+  margin-right: 0;
+}
+
+#clock {
+  color: @color4;
+}
+
+@keyframes blink {
+  to {
+    background-color: #ffffff;
+    color: #000000;
+  }
+}
+
+label:focus {
+  /* background-color: #000000; */
+}
+
+#cpu {
+  color: @color7;
+}
+
+#memory {
+  color: @color3;
+}
+
+#disk {
+  /* background-color: #964B00; */
+}
+
+#network {
+  /* background-color: #2980b9; */
+}
+
+#network.disconnected {
+  /* background-color: #f53c3c; */
+}
+
+#pulseaudio {
+  color: #00aaff;
+}
+
+#pulseaudio.muted {
+  /* background-color: #90b1b1; */
+  /* color: #2a5c45; */
+}
+
+#wireplumber {
+  /* background-color: #fff0f5; */
+  /* color: #000000; */
+}
+
+#wireplumber.muted {
+  /* background-color: #f53c3c; */
+}
+
+#custom-media {
+  /* color: #2a5c45; */
+  min-width: 100px;
+}
+
+
+#custom-media.custom-vlc {}
+
+#temperature {
+  color: @color6;
+}
+
+#temperature.critical {}
+
+#tray {}
+
+#tray>.passive {
+  -gtk-icon-effect: dim;
+}
+
+#tray>.needs-attention {
+  -gtk-icon-effect: highlight;
+  background-color: @color2;
+}
+
+#idle_inhibitor {
+  color: @color4;
+}
+
+#idle_inhibitor.activated {
+  background-color: @color6;
+  color: #2d3436;
+}
+
+#mpd {
+
+  color: @color4;
+}
+
+#mpd.disconnected {}
+
+#mpd.stopped {}
+
+#mpd.paused {}
+
+#language {
+
+  color: @color7;
+  padding: 0 5px;
+  margin: 0 5px;
+  min-width: 16px;
+}
+
+#keyboard-state {
+  color: #88ddff;
+  padding: 0 0px;
+  margin: 0 5px;
+  min-width: 16px;
+}
+
+#keyboard-state>label {
+  padding: 0 5px;
+}
+
+#keyboard-state>label.locked {}
+
+#scratchpad {}
+
+#scratchpad.empty {
+  background-color: transparent;
+}
+
+#privacy {
+  padding: 0;
+}
+
+#privacy-item {
+  padding: 0 5px;
+  color: white;
+}
+
+#privacy-item.screenshare {
+  background-color: #cf5700;
+}
+
+#privacy-item.audio-in {
+  background-color: #1ca000;
+}
+
+#privacy-item.audio-out {
+  background-color: #268bd3;
+}
+
+/*Custom*/
+.modules-left {
+  padding-left: 4px;
+
+  /*background-color: rgba(27, 72, 97, 0.42);*/
+  /*background-color: rgba(41, 162, 152, 0.27);*/
+}
+
+.modules-center {
+  /*background: linear-gradient(90deg, rgba(178, 133, 0, .42) 35%, rgba(210, 54, 129, 0.42));*/
+  /*background-color: rgba(38, 139, 211, 0.27);*/
+  /*background-color: rgba(27, 72, 97, 0.42);*/
+  padding: 0 12px;
+  color: @color8;
+}
+
+.modules-right {
+  /*background-color: rgba(27, 72, 97, 0.42);*/
+  margin-right: 12;
+}
+
+#custom-power {
+  color: @color4;
+}
+
+#custom-blender {
+  font-size: 20px;
+  background-image: url("/home/trip/.local/share/icons/candy-icons/apps/scalable/blender.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 0 8px;
+}
+
+#custom-discord {
+  font-size: 20px;
+  background-image: url("/home/trip/.local/share/icons/candy-icons/apps/scalable/discord.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 0 8px;
+}
+
+#custom-substance {
+  font-size: 20px;
+  background-image: url("/home/trip/.local/share/icons/candy-icons/apps/scalable/applications-science.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 0 8px;
+}
+
+#custom-telegram {
+  font-size: 20px;
+  background-image: url("/home/trip/.local/share/icons/candy-icons/apps/scalable/telegram-desktop.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 0 8px;
+}
+
+#custom-transmission {
+  font-size: 20px;
+  background-image: url("/home/trip/.local/share/icons/candy-icons/apps/scalable/transmission.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 0 8px;
+}
+
+#custom-steam {
+  font-size: 20px;
+  background-image: url("/home/trip/.local/share/icons/candy-icons/apps/scalable/steam.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 0 8px;
+}
+
+#cava {
+  padding: 2px;
+  margin-bottom: 0px;
+  margin-right: 8px;
+  /*border: 1px solid @color5;*/
+  color: @color7;
+  /*background-color: rgba(38, 139, 211, 0.27);*/
+}
+
+#custom-cava {
+  color: #8FBC8F;
+  border-left: 0px;
+  border-right: 0px;
+  padding-bottom: 6px;
+  font-family: "bargraph";
+  font-size: 22px;
+}
+
+#Chromium {
+  background-color: red;
+}
+
+/* Solarized Osaka Palette*/
+/*background-color='rgb(0, 20, 25)'
+cursor-background-color='rgb(131, 147, 149)'
+cursor-colors-set=true
+cursor-foreground-color='rgba(0, 20, 25)'
+foreground-color='rgb(131, 147, 149)'
+highlight-background-color='rgb(131, 147, 149)'
+highlight-colors-set=true
+highlight-foreground-color='rgb(0, 20, 25)'
+palette=[
+    'rgb(0, 20, 25)',#001419
+  'rgb(219, 48, 45)',
+  'rgb(132, 153, 0)',#849900
+  'rgb(178, 133, 0)',#b28500"
+  'rgb(38, 139, 211)',#268bd3,
+  'rgb(210, 54, 129)' 
+  'rgb(41, 162, 152)',#29a298
+  'rgb(131, 147, 149)',#839395"
+  'rgb(0, 20, 25)',
+  'rgb(219, 48, 45)',
+  'rgb(132, 153, 0)',
+  'rgb(178, 133, 0)',
+  'rgb(38, 139, 211)',
+  'rgb(210, 54, 129)',
+  'rgb(41, 162, 152)',
+  'rgb(131, 147, 149)'
+]*/

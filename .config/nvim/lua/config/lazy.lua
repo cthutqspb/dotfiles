@@ -1,7 +1,7 @@
-local cmd = vim.cmd            -- execute Vim commands
+local cmd = vim.cmd -- execute Vim commands
 local exec = vim.api.nvim_exec -- execute Vimscript
-local g = vim.g                -- global variables
-local opt = vim.opt            -- global/buffer/windows-scoped options
+local g = vim.g -- global variables
+local opt = vim.opt -- global/buffer/windows-scoped options
 local api = vim.api
 local keymap = vim.keymap
 local v = vim.v
@@ -12,7 +12,7 @@ local diagnostic = vim.diagnostic
 local opts = { noremap = true, silent = true }
 
 diagnostic.config({
-  virtual_text = true,
+	virtual_text = true,
 })
 
 cmd("set keymap=russian-jcukenwin")
@@ -48,12 +48,13 @@ opt.swapfile = false
 --opt.smoothscroll = true
 opt.linebreak = true
 opt.showbreak = ">>>>"
+opt.updatetime = 500
 
 opt.spelllang = { "en_us", "ru" } -- Словари рус eng
 
 opt.undolevels = 999
-opt.undofile = true              -- Возможность отката назад
-opt.undodir = "~/.vim/undo/"     -- keep undo files out of file dir
+opt.undofile = true -- Возможность отката назад
+opt.undodir = "~/.vim/undo/" -- keep undo files out of file dir
 -- opt.directory = "~/.vim/swp/"     -- keep unsaved changes away from file dir
 opt.backupdir = "~/.vim/backup/" -- backups also should not go to git
 
@@ -63,16 +64,16 @@ opt.number = true
 
 -- search settings
 opt.ignorecase = true -- ignore case when searching
-opt.smartcase = true  -- if you include mixed case in your search, assumes you want case-sensitive
+opt.smartcase = true -- if you include mixed case in your search, assumes you want case-sensitive
 
 -- cursor line
 opt.cursorline = true -- highlight the current cursor line
 
 -- tabs & indentation
-opt.tabstop = 4        -- 4 spaces for tabs (prettier default)
-opt.shiftwidth = 4     -- 4 spaces for indent width
-opt.expandtab = true   -- expand tab to spaces
-opt.autoindent = true  -- copy indent from current line when starting new one
+opt.tabstop = 4 -- 4 spaces for tabs (prettier default)
+opt.shiftwidth = 4 -- 4 spaces for indent width
+opt.expandtab = true -- expand tab to spaces
+opt.autoindent = true -- copy indent from current line when starting new one
 opt.smartindent = true -- autoindent new lines
 
 -- split windows
@@ -81,7 +82,7 @@ opt.splitbelow = true -- split horizontal window to the bottom
 
 -- UFO settings
 opt.foldcolumn = "1" -- '0' is not bad
-opt.foldlevel = 99   -- Using ufo provider need a large value, feel free to decrease the value
+opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 opt.foldlevelstart = 99
 opt.foldenable = true
 
@@ -123,107 +124,107 @@ autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "norm
 ]])
 -- Подсвечивает на доли секунды скопированную часть текста
 exec(
-  [[
+	[[
 augroup YankHighlight
 autocmd!
 autocmd TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=700}
 augroup end
 ]],
-  false
+	false
 )
 
 -- Bootstrap lazy.nvim
 local lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (uv or loop).fs_stat(lazypath) then
-  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-  local out = fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
-  if v.shell_error ~= 0 then
-    api.nvim_echo({
-      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-      { out,                            "WarningMsg" },
-      { "\nPress any key to exit..." },
-    }, true, {})
-    fn.getchar()
-    os.exit(1)
-  end
+	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+	local out = fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+	if v.shell_error ~= 0 then
+		api.nvim_echo({
+			{ "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+			{ out, "WarningMsg" },
+			{ "\nPress any key to exit..." },
+		}, true, {})
+		fn.getchar()
+		os.exit(1)
+	end
 end
 opt.rtp:prepend(lazypath)
 
 -- Setup lazy.nvim
 require("lazy").setup({
-  spec = {
-    -- import your plugins
-    { import = "plugins" },
-  },
-  -- Configure any other settings here. See the documentation for more details.
-  -- colorscheme that will be used when installing plugins.
-  install = { colorscheme = { "iceberg" } },
-  -- automatically check for plugin updates
-  checker = { enabled = true },
+	spec = {
+		-- import your plugins
+		{ import = "plugins" },
+	},
+	-- Configure any other settings here. See the documentation for more details.
+	-- colorscheme that will be used when installing plugins.
+	install = { colorscheme = { "iceberg" } },
+	-- automatically check for plugin updates
+	checker = { enabled = true },
 })
 
 require("luarocks").setup({ rocks = { "fzy" } })
 
 require("lualine").setup({
-  options = {
-    icons_enabled = true,
-    theme = "auto",
-    component_separators = { left = "", right = "" },
-    section_separators = { left = "", right = "" },
-    disabled_filetypes = {
-      statusline = {},
-      winbar = {},
-      "packer",
-      "neo-tree",
-    },
-    ignore_focus = {},
-    always_divide_middle = true,
-    always_show_tabline = true,
-    globalstatus = false,
-    refresh = {
-      statusline = 100,
-      tabline = 100,
-      winbar = 100,
-    },
-  },
-  sections = {
-    lualine_a = { "mode" },
-    lualine_b = { "branch", "diff", "diagnostics" },
-    lualine_c = { "filename" },
-    lualine_x = { "encoding", "fileformat", "filetype" },
-    lualine_y = { "progress" },
-    lualine_z = { "location" },
-  },
-  inactive_sections = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = { "filename" },
-    lualine_x = { "location" },
-    lualine_y = {},
-    lualine_z = {},
-  },
-  tabline = {},
-  winbar = {},
-  inactive_winbar = {},
-  extensions = {},
+	options = {
+		icons_enabled = true,
+		theme = "auto",
+		component_separators = { left = "", right = "" },
+		section_separators = { left = "", right = "" },
+		disabled_filetypes = {
+			statusline = {},
+			winbar = {},
+			"packer",
+			"neo-tree",
+		},
+		ignore_focus = {},
+		always_divide_middle = true,
+		always_show_tabline = true,
+		globalstatus = false,
+		refresh = {
+			statusline = 100,
+			tabline = 100,
+			winbar = 100,
+		},
+	},
+	sections = {
+		lualine_a = { "mode" },
+		lualine_b = { "branch", "diff", "diagnostics" },
+		lualine_c = { "filename" },
+		lualine_x = { "encoding", "fileformat", "filetype" },
+		lualine_y = { "progress" },
+		lualine_z = { "location" },
+	},
+	inactive_sections = {
+		lualine_a = {},
+		lualine_b = {},
+		lualine_c = { "filename" },
+		lualine_x = { "location" },
+		lualine_y = {},
+		lualine_z = {},
+	},
+	tabline = {},
+	winbar = {},
+	inactive_winbar = {},
+	extensions = {},
 })
 
 require("bufferline").setup({
-  options = {
-    mode = "buffers",
-    source_selector = {
-      winbar = true,
-    },
-    offsets = {
-      {
-        filetype = "neo-tree",
-        text = "󰥨 File Explorer",
-        separator = true,
-        highlight = "Directory",
-        text_align = "left",
-      },
-    },
-  },
+	options = {
+		mode = "buffers",
+		source_selector = {
+			winbar = true,
+		},
+		offsets = {
+			{
+				filetype = "neo-tree",
+				text = "󰥨 File Explorer",
+				separator = true,
+				highlight = "Directory",
+				text_align = "left",
+			},
+		},
+	},
 })
 
 require("telescope").load_extension("fzf")
@@ -232,130 +233,130 @@ require("telescope").load_extension("fzf")
 
 -- Optional, you don't have to run setup.
 require("transparent").setup({
-  -- table: default groups
-  groups = {
-    "Normal",
-    "NormalNC",
-    "Comment",
-    "Constant",
-    "Special",
-    "Identifier",
-    "Statement",
-    "PreProc",
-    "Type",
-    "Underlined",
-    "Todo",
-    "String",
-    "Function",
-    "Conditional",
-    "Repeat",
-    "Operator",
-    "Structure",
-    "LineNr",
-    "NonText",
-    "SignColumn",
-    "CursorLine",
-    "CursorLineNr",
-    "StatusLine",
-    "StatusLineNC",
-    "EndOfBuffer",
-  },
-  -- table: additional groups that should be cleared
-  extra_groups = {},
-  -- table: groups you don't want to clear
-  exclude_groups = {
-    "NeoTreeCursorLine",
-  },
-  -- function: code to be executed after highlight groups are cleared
-  -- Also the user event "TransparentClear" will be triggered
-  on_clear = function() end,
+	-- table: default groups
+	groups = {
+		"Normal",
+		"NormalNC",
+		"Comment",
+		"Constant",
+		"Special",
+		"Identifier",
+		"Statement",
+		"PreProc",
+		"Type",
+		"Underlined",
+		"Todo",
+		"String",
+		"Function",
+		"Conditional",
+		"Repeat",
+		"Operator",
+		"Structure",
+		"LineNr",
+		"NonText",
+		"SignColumn",
+		"CursorLine",
+		"CursorLineNr",
+		"StatusLine",
+		"StatusLineNC",
+		"EndOfBuffer",
+	},
+	-- table: additional groups that should be cleared
+	extra_groups = {},
+	-- table: groups you don't want to clear
+	exclude_groups = {
+		"NeoTreeCursorLine",
+	},
+	-- function: code to be executed after highlight groups are cleared
+	-- Also the user event "TransparentClear" will be triggered
+	on_clear = function() end,
 })
 
 require("nvim-web-devicons").setup({
-  -- your personal icons can go here (to override)
-  -- you can specify color or cterm_color instead of specifying both of them
-  -- DevIcon will be appended to `name`
-  override = {
-    zsh = {
-      icon = "",
-      color = "#428850",
-      cterm_color = "65",
-      name = "Zsh",
-    },
-  },
-  -- globally enable different highlight colors per icon (default to true)
-  -- if set to false all icons will have the default icon's color
-  color_icons = true,
-  -- globally enable default icons (default to false)
-  -- will get overriden by `get_icons` option
-  default = true,
-  -- globally enable "strict" selection of icons - icon will be looked up in
-  -- different tables, first by filename, and if not found by extension; this
-  -- prevents cases when file doesn't have any extension but still gets some icon
-  -- because its name happened to match some extension (default to false)
-  strict = true,
-  -- set the light or dark variant manually, instead of relying on `background`
-  -- (default to nil)
-  variant = "light|dark",
-  -- same as `override` but specifically for overrides by filename
-  -- takes effect when `strict` is true
-  override_by_filename = {
-    [".gitignore"] = {
-      icon = "",
-      color = "#f1502f",
-      name = "Gitignore",
-    },
-  },
-  -- same as `override` but specifically for overrides by extension
-  -- takes effect when `strict` is true
-  override_by_extension = {
-    ["log"] = {
-      icon = "",
-      color = "#81e043",
-      name = "Log",
-    },
-  },
-  -- same as `override` but specifically for operating system
-  -- takes effect when `strict` is true
-  override_by_operating_system = {
-    ["apple"] = {
-      icon = "",
-      color = "#A2AAAD",
-      cterm_color = "248",
-      name = "Apple",
-    },
-  },
+	-- your personal icons can go here (to override)
+	-- you can specify color or cterm_color instead of specifying both of them
+	-- DevIcon will be appended to `name`
+	override = {
+		zsh = {
+			icon = "",
+			color = "#428850",
+			cterm_color = "65",
+			name = "Zsh",
+		},
+	},
+	-- globally enable different highlight colors per icon (default to true)
+	-- if set to false all icons will have the default icon's color
+	color_icons = true,
+	-- globally enable default icons (default to false)
+	-- will get overriden by `get_icons` option
+	default = true,
+	-- globally enable "strict" selection of icons - icon will be looked up in
+	-- different tables, first by filename, and if not found by extension; this
+	-- prevents cases when file doesn't have any extension but still gets some icon
+	-- because its name happened to match some extension (default to false)
+	strict = true,
+	-- set the light or dark variant manually, instead of relying on `background`
+	-- (default to nil)
+	variant = "light|dark",
+	-- same as `override` but specifically for overrides by filename
+	-- takes effect when `strict` is true
+	override_by_filename = {
+		[".gitignore"] = {
+			icon = "",
+			color = "#f1502f",
+			name = "Gitignore",
+		},
+	},
+	-- same as `override` but specifically for overrides by extension
+	-- takes effect when `strict` is true
+	override_by_extension = {
+		["log"] = {
+			icon = "",
+			color = "#81e043",
+			name = "Log",
+		},
+	},
+	-- same as `override` but specifically for operating system
+	-- takes effect when `strict` is true
+	override_by_operating_system = {
+		["apple"] = {
+			icon = "",
+			color = "#A2AAAD",
+			cterm_color = "248",
+			name = "Apple",
+		},
+	},
 })
 
 -- Conform
 require("conform").setup({
-  formatters_by_ft = {
-    -- lua = { "stylua" },
-    -- Conform will run multiple formatters sequentially
-    python = { "isort", "black" },
-    -- You can customize some of the format options for the filetype (:help conform.format)
-    rust = { "rustfmt", lsp_format = "fallback" },
-    -- Conform will run the first available formatter
-    -- javascript = { "prettierd", "prettier", stop_after_first = true },
-    --javascript = { "prettier", "eslint" },
-    --typescript = { "prettier", "eslint" },
-    --javascriptreact = { "prettier", "eslint" },
-    --typescriptreact = { "prettier", "eslint" },
-    --svelte = { "prettier" },
-    css = { "prettier" },
-    --html = { "prettier" },
-    json = { "prettier" },
-    yaml = { "prettier" },
-    markdown = { "prettier" },
-    graphql = { "prettier" },
-    lua = { "stylua" },
-  },
+	formatters_by_ft = {
+		-- lua = { "stylua" },
+		-- Conform will run multiple formatters sequentially
+		-- python = { "isort", "black" },
+		-- You can customize some of the format options for the filetype (:help conform.format)
+		-- rust = { "rustfmt", lsp_format = "fallback" },
+		-- Conform will run the first available formatter
+		-- javascript = { "prettierd", "prettier", stop_after_first = true },
+		--javascript = { "prettier", "eslint" },
+		typescript = { "prettier"},
+		--javascriptreact = { "prettier", "eslint" },
+		typescriptreact = { "prettier" },
+		css = { "prettier" },
+    scss = { "prettier" },
+    html = { "prettier" },
+		json = { "prettier" },
+		yaml = { "prettier" },
+		markdown = { "prettier" },
+		graphql = { "prettier" },
+		lua = { "stylua" },
+	},
 })
 
 require("ufo").setup({
-  provider_selector = function(bufnr, filetype, buftype)
-    return { "treesitter", "indent" }
-  end,
+	provider_selector = function(bufnr, filetype, buftype)
+		return { "treesitter", "indent" }
+	end,
 })
 
 -- Autopairs for coq
@@ -376,24 +377,24 @@ remap("i", "<s-tab>", [[pumvisible() ? "<c-p>" : "<bs>"]], { expr = true, norema
 _G.MUtils = {}
 
 MUtils.CR = function()
-  if fn.pumvisible() ~= 0 then
-    if fn.complete_info({ "selected" }).selected ~= -1 then
-      return npairs.esc("<c-y>")
-    else
-      return npairs.esc("<c-e>") .. npairs.autopairs_cr()
-    end
-  else
-    return npairs.autopairs_cr()
-  end
+	if fn.pumvisible() ~= 0 then
+		if fn.complete_info({ "selected" }).selected ~= -1 then
+			return npairs.esc("<c-y>")
+		else
+			return npairs.esc("<c-e>") .. npairs.autopairs_cr()
+		end
+	else
+		return npairs.autopairs_cr()
+	end
 end
 remap("i", "<cr>", "v:lua.MUtils.CR()", { expr = true, noremap = true })
 
 MUtils.BS = function()
-  if fn.pumvisible() ~= 0 and vim.fn.complete_info({ "mode" }).mode == "eval" then
-    return npairs.esc("<c-e>") .. npairs.autopairs_bs()
-  else
-    return npairs.autopairs_bs()
-  end
+	if fn.pumvisible() ~= 0 and vim.fn.complete_info({ "mode" }).mode == "eval" then
+		return npairs.esc("<c-e>") .. npairs.autopairs_bs()
+	else
+		return npairs.autopairs_bs()
+	end
 end
 remap("i", "<bs>", "v:lua.MUtils.BS()", { expr = true, noremap = true })
 --
@@ -403,10 +404,10 @@ require("lazy").setup({ { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate"
 require("nvim-highlight-colors").setup({})
 
 api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*",
-  callback = function(args)
-    require("conform").format({ bufnr = args.buf })
-  end,
+	pattern = "*",
+	callback = function(args)
+		require("conform").format({ bufnr = args.buf })
+	end,
 })
 
 require("transparent").clear_prefix("NeoTree")
@@ -419,10 +420,12 @@ require("transparent").clear_prefix("nvim-lspconfig")
 require("transparent").clear_prefix("NormalFloat")
 require("transparent").clear_prefix("FloatBorder")
 require("transparent").clear_prefix("colortils")
+require("transparent").clear_prefix("BlinkCmp")
+
 --require("transparent").clear_prefix("Telescope")
 
 require("bufferline").setup({
-  options = {},
+	options = {},
 })
 local builtin = require("telescope.builtin")
 
@@ -438,16 +441,24 @@ api.nvim_set_hl(0, "TelescopePromptBorder", { bg = "none" })
 api.nvim_set_hl(0, "TelescopeBorder", { bg = "none" })
 api.nvim_set_hl(0, "TelescopeResultsBorder", { bg = "none" })
 api.nvim_set_hl(0, "StatusLine", { bg = "none", blend = 0 })
+api.nvim_set_hl(0, "Buffer", { bg = "none", blend = 0 })
+
 -- vim.api.nvim_set_hl(0, "NeoTreeFileName", { fg = "#A6E22E", bg = nil, bold = true })
 
 api.nvim_create_augroup("neotree", {})
 api.nvim_create_autocmd("UiEnter", {
-  desc = "Open Neotree automatically",
-  group = "neotree",
-  callback = function()
-    cmd("Neotree toggle")
-  end,
+	desc = "Open Neotree automatically",
+	group = "neotree",
+	callback = function()
+		cmd("Neotree toggle")
+	end,
 })
+
+-- for HLSL
+-- api.nvim_create_autocmd({"BufRead", "BufNewFile"}, {
+--  pattern = "*.shader",
+--  command = "set filetype=hlsl"
+-- })
 
 -- UFO
 -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
@@ -482,3 +493,20 @@ keymap.set("n", "<tab>", ":tabnext<Return>", opts)
 --Split windows
 keymap.set("n", "ss", ":split<Return>", opts)
 keymap.set("n", "sv", ":vsplit<Return>", opts)
+-- Inspect
+keymap.set("n", "<leader>i", function()
+	-- If we find a floating window, close it.
+	local found_float = false
+	for _, win in ipairs(api.nvim_list_wins()) do
+		if api.nvim_win_get_config(win).relative ~= "" then
+			api.nvim_win_close(win, true)
+			found_float = true
+		end
+	end
+
+	if found_float then
+		return
+	end
+
+	diagnostic.open_float(nil, { focus = false, scope = "cursor" })
+end, { desc = "Toggle Diagnostics" })
