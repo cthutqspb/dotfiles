@@ -115,7 +115,7 @@ return {
           },
           -- If you don't want to use these columns, you can set `enabled = false` for each of them individually
           file_size = {
-            enabled = true,
+            enabled = false,
             width = 12,          -- width of the column
             required_width = 32, -- min width of window required to show this column
           },
@@ -151,6 +151,7 @@ return {
           },
         },
         window = {
+          -- auto_expand_width = true,
           position = "left",
           width = 40,
           mapping_options = {
@@ -261,7 +262,7 @@ return {
           -- "open_current",  -- netrw disabled, opening a directory opens within the
           -- window like netrw would, regardless of window.position
           -- "disabled",    -- netrw left alone, neo-tree does not handle opening dirs
-          use_libuv_file_watcher = false, -- This will use the OS level file watchers to detect changes
+          use_libuv_file_watcher = true, -- This will use the OS level file watchers to detect changes
           -- instead of relying on nvim autocmd events.
           window = {
             mappings = {

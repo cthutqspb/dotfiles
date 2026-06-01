@@ -253,8 +253,7 @@ label:focus {
 }
 
 #mpd {
-
-  color: @color4;
+  color: @color7;
 }
 
 #mpd.disconnected {}

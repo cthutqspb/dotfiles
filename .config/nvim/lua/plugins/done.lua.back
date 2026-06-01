@@ -1,0 +1,8 @@
+return {
+     "monkoose/DoNe",
+    lazy = true,
+    config = function()
+        -- не обязательно, просто для сборки
+        -- vim.keymap.set("n", "<F5>", "<Cmd>DoNe build<CR>")
+    end,
+}

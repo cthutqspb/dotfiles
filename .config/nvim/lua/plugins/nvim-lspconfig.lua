@@ -1,34 +1,227 @@
 return {
-  { 
-    "neovim/nvim-lspconfig",   
-  },
   {
-    "mason-org/mason.nvim",
-    opts = {}
-  },
-  {
-    "mason-org/mason-lspconfig.nvim",
+    "neovim/nvim-lspconfig",
     dependencies = {
-      "neovim/nvim-lspconfig",
-      "mason-org/mason.nvim"
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
     },
-    opts = {
-      ensure_installed = {
-         'lua_ls', -- Lua (great for editing Neovim config)
-        'pyright', -- Python
-        'ts_ls', -- TypeScript / JavaScript
-        "cssls",
-        "eslint",
-        "html",
-        "jsonls",
-        "tailwindcss",
-        "bashls",
-        'rust_analyzer', -- Rust
-        'clangd', -- C / C++
-        'hlsl'
+    config = function()
+      -- 1. Сначала инициализируем Mason
+      require("mason").setup()
+      require("mason-lspconfig").setup({
+        ensure_installed = {
+          'lua_ls',
+          'pyright',
+          'ts_ls',
+          "cssls",
+          "eslint",
+          "html",
+          "jsonls",
+          "tailwindcss",
+          "bashls",
+          'rust_analyzer',
+          'clangd',
+        },
+        automatic_installation = true,
+      })
+
+      -- 2. Отключаем всплывающие сообщения от серверов
+      vim.lsp.handlers["window/showMessage"] = function() end
+      vim.lsp.handlers["window/showMessageRequest"] = function() end
+      vim.lsp.handlers["window/logMessage"] = function() end
+      
+      -- Уровень логов
+      vim.lsp.log.set_level(vim.log.levels.WARN)
+
+      -- 3. Общий on_attach
+      local on_attach = function(client, bufnr)
+        client.server_capabilities.documentFormattingProvider = false
+        client.server_capabilities.documentRangeFormattingProvider = false
+        client.server_capabilities.workDoneProgress = false
+      end
+
+      local lspconfig = require("lspconfig")
+
+      -- 4. Настройка lua_ls для Defold
+      lspconfig.lua_ls.setup({
+        on_attach = on_attach,
+        settings = {
+          Lua = {
+            runtime = { version = "Lua 5.1" },
+            workspace = {
+              library = {
+                vim.fn.expand("$VIMRUNTIME/lua"),
+                vim.api.nvim_get_runtime_file("", true),
+                vim.fn.getcwd() .. "/.internal",
+              },
+              checkThirdParty = false,
+            },
+            diagnostics = {
+              globals = {
+                "go", "gui", "msg", "url", "sys", "resource", "sound", "sprite",
+                "timer", "vmath", "window", "collectionfactory", "factory",
+                "particlefx", "render", "tilemap", "json", "html5", "http",
+                "socket", "on_message", "on_input", "update", "init", "final", "hash"
+              },
+            },
+            hint = { enable = true },
+          },
+        },
+      })
+
+      -- 5. Список остальных серверов для быстрой настройки
+      local servers = {
+        "pyright", "ts_ls", "cssls", "eslint", "html",
+        "jsonls", "tailwindcss", "bashls", "rust_analyzer", "clangd"
       }
-    }
-  }
+
+      for _, lsp in ipairs(servers) do
+        -- Проверка на случай, если имя сервера изменится (как tsserver -> ts_ls)
+        if lspconfig[lsp] then
+          lspconfig[lsp].setup({
+            on_attach = on_attach,
+          })
+        end
+      end
+    end,
+  }, 
+-- return {
+  --  {
+  --   "neovim/nvim-lspconfig",
+  --   dependencies = {
+  --     "williamboman/mason.nvim",
+  --     "williamboman/mason-lspconfig.nvim",
+  --   },
+  --   config = function()
+  --     -- ОТКЛЮЧАЕМ НАДОЕДЛИВЫЕ СООБЩЕНИЯ ГЛОБАЛЬНО
+  --     -- Это ключевое решение вашей проблемы с логами
+  --     vim.lsp.handlers["window/showMessage"] = function() end
+  --     vim.lsp.handlers["window/showMessageRequest"] = function() end
+  --     vim.lsp.handlers["window/logMessage"] = function() end
+  --     
+  --     -- Устанавливаем уровень логов на WARN (не показываем debug/info)
+  --     vim.lsp.log.set_level(vim.log.levels.WARN)
+  --
+  --     -- Базовый on_attach для всех серверов
+  --     local on_attach = function(client, bufnr)
+  --       -- Отключаем уведомления о форматировании
+  --       client.server_capabilities.documentFormattingProvider = false
+  --       client.server_capabilities.documentRangeFormattingProvider = false
+  --       
+  --       -- Отключаем прогресс-уведомления
+  --       client.server_capabilities.workDoneProgress = false
+  --     end
+  --
+  --     -- Настройка конкретных серверов
+  --     local lspconfig = require("lspconfig")
+  --     
+  --     -- lua_ls с поддержкой Defold
+  --     lspconfig.lua_ls.setup({
+  --       on_attach = on_attach,
+  --       settings = {
+  --         Lua = {
+  --           runtime = { version = "Lua 5.1" },
+  --           workspace = {
+  --             -- Это заставит LSP видеть код библиотек (Druid и др.)
+  --             library = {
+  --                 vim.fn.expand("$VIMRUNTIME/lua"),
+  --                 vim.api.nvim_get_runtime_file("", true), -- подтягивает плагины nvim
+  --                 vim.fn.getcwd() .. "/.internal",         -- пробуем корень .internal
+  --             },
+  --             checkThirdParty = false,
+  --           },
+  --           diagnostics = {
+  --             globals = {
+  --               "go", "gui", "msg", "url", "sys", "resource", "sound", "sprite",
+  --               "timer", "vmath", "window", "collectionfactory", "factory",
+  --               "particlefx", "render", "tilemap", "json", "html5", "http",
+  --               "socket", "on_message", "on_input", "update", "init", "final",
+  --               "hash" -- кстати, добавьте hash, его не было в вашем списке
+  --             },
+  --           },
+  --           hint = { enable = true },
+  --         },
+  --       },
+  --     })
+  --
+  --     -- Другие серверы с базовым on_attach
+  --     lspconfig.pyright.setup({ on_attach = on_attach })
+  --     lspconfig.ts_ls.setup({ on_attach = on_attach })
+  --     lspconfig.cssls.setup({ on_attach = on_attach })
+  --     lspconfig.eslint.setup({ on_attach = on_attach })
+  --     lspconfig.html.setup({ on_attach = on_attach })
+  --     lspconfig.jsonls.setup({ on_attach = on_attach })
+  --     lspconfig.tailwindcss.setup({ on_attach = on_attach })
+  --     lspconfig.bashls.setup({ on_attach = on_attach })
+  --     lspconfig.rust_analyzer.setup({ on_attach = on_attach })
+  --     lspconfig.clangd.setup({ on_attach = on_attach })
+  --     
+  --     -- hlsl нестандартный, возможно нужен отдельный обработчик
+  --     -- lspconfig.hlsl.setup({ on_attach = on_attach })
+  --   end,
+  -- }, 
+  -- {
+  --   "williamboman/mason-lspconfig.nvim",
+  --   dependencies = {
+  --     "williamboman/mason.nvim",
+  --     "williamboman/mason-lspconfig.nvim",
+  --   },
+  --   opts = {
+  --     ensure_installed = {
+  --       'lua_ls',
+  --       'pyright',
+  --       'ts_ls',
+  --       "cssls",
+  --       "eslint",
+  --       "html",
+  --       "jsonls",
+  --       "tailwindcss",
+  --       "bashls",
+  --       'rust_analyzer',
+  --       'clangd',
+  --       -- 'hlsl' -- возможно не поддерживается mason-ом
+  --     },
+  --     -- Автоматически настраивать серверы после установки
+  --     automatic_installation = true,
+  --   },
+  --   config = function(_, opts)
+  --     require("mason").setup()
+  --     require("mason-lspconfig").setup(opts)
+  --   end,
+  -- },
+
+
+
+  -- { 
+  --   "neovim/nvim-lspconfig",   
+  -- },
+  -- {
+  --   "mason-org/mason.nvim",
+  --   opts = {}
+  -- },
+  -- {
+  --   "mason-org/mason-lspconfig.nvim",
+  --   dependencies = {
+  --     "neovim/nvim-lspconfig",
+  --     "mason-org/mason.nvim"
+  --   },
+  --   opts = {
+  --     ensure_installed = {
+  --       'lua_ls', -- Lua (great for editing Neovim config)
+  --       'pyright', -- Python
+  --       'ts_ls', -- TypeScript / JavaScript
+  --       "cssls",
+  --       "eslint",
+  --       "html",
+  --       "jsonls",
+  --       "tailwindcss",
+  --       "bashls",
+  --       'rust_analyzer', -- Rust
+  --       'clangd', -- C / C++
+  --       'hlsl'
+  --     }
+  --   }
+  -- }
 	-- "neovim/nvim-lspconfig",
 	-- event = { "BufReadPre", "BufNewFile" },
 	-- opts = {

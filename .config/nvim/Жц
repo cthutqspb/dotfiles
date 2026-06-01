@@ -1,0 +1,37 @@
+return {
+  'nvim-telescope/telescope.nvim',
+  tag = '0.1.8',
+  dependencies = {
+    'nvim-lua/plenary.nvim',
+    { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+  },
+  config = function()
+    require('telescope').setup({
+      defaults = {
+        -- Кастомный превьюер, который подхватывает твои расширения
+        buffer_previewer_maker = function(filepath, bufnr, opts)
+          local ext = vim.fn.fnamemodify(filepath, ":e")
+          
+          -- Если файл имеет одно из твоих расширений, принудительно задаем тип lua
+          if ext == "script" or ext == "gui_script" or ext == "render_script" or ext == "editor_script" then
+            opts.ft = "lua"
+          end
+          
+          -- Запускаем стандартный превьюер Telescope с нашими правками
+          require("telescope.previewers").buffer_previewer_maker(filepath, bufnr, opts)
+        end,
+      },
+      extensions = {
+        fzf = {
+          fuzzy = true,
+          override_generic_sorter = true,
+          override_file_sorter = true,
+          case_mode = "smart_case",
+        },
+      },
+    })
+
+    require("telescope").load_extension("fzf")
+  end
+}
+

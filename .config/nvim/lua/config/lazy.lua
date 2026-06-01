@@ -1,4 +1,6 @@
+---@diagnostic disable: undefined-global
 local cmd = vim.cmd -- execute Vim commands
+local filetype = vim.filetype
 local exec = vim.api.nvim_exec -- execute Vimscript
 local g = vim.g -- global variables
 local opt = vim.opt -- global/buffer/windows-scoped options
@@ -13,6 +15,7 @@ local opts = { noremap = true, silent = true }
 
 diagnostic.config({
 	virtual_text = true,
+	signs = true,
 })
 
 cmd("set keymap=russian-jcukenwin")
@@ -21,6 +24,7 @@ cmd("set imsearch=0")
 
 -- set leader key to space
 vim.g.mapleader = " "
+vim.g.maplocalleader = ","
 
 opt.encoding = "utf-8"
 -- Направление перевода с русского на английский
@@ -45,7 +49,6 @@ opt.incsearch = true
 opt.mouse = "a"
 opt.ttyfast = true
 opt.swapfile = false
---opt.smoothscroll = true
 opt.linebreak = true
 opt.showbreak = ">>>>"
 opt.updatetime = 500
@@ -86,6 +89,11 @@ opt.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrea
 opt.foldlevelstart = 99
 opt.foldenable = true
 
+-- opt.wildmenu = true
+-- opt.wildmode = 'full'
+-- opt.wildoptions = "pum"  -- float добавляет поддержку столбцов
+-- opt.pumheight = 20
+
 -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
 -- keymap.set("n", "zR", require("ufo").openAllFolds)
 -- keymap.set("n", "zM", require("ufo").closeAllFolds)
@@ -93,13 +101,22 @@ opt.foldenable = true
 -- copy paste like gui
 keymap.set("v", "<C-c>", '"+y<Esc>i')
 keymap.set("v", "<C-x>", '"+d<Esc>i')
-keymap.set("i", "<C-v>", '"+pi')
-keymap.set("i", "<C-v>", '<Esc>"+pi', { noremap = true, silent = true })
-keymap.set("i", "<C-z>", "<Esc>ui", { noremap = true, silent = true })
-keymap.set("i", "<C-z>", "<Esc>ui", { noremap = true, silent = true })
-keymap.set({ "i", "v", "x", "t" }, "<C-a>", "<C-\\><C-n>ggVG", { noremap = true, silent = true })
+keymap.set("i", "<C-v>", '<Esc>"+pi', opts)
+keymap.set("i", "<C-z>", "<Esc>ui", opts)
+keymap.set({ "i", "v", "x", "t" }, "<C-a>", "<C-\\><C-n>ggVG", opts)
 
-vim.cmd("autocmd User TelescopePreviewerLoaded setlocal number")
+cmd("autocmd User TelescopePreviewerLoaded setlocal number")
+-- vim.cmd([[autocmd BufNewFile,BufRead *.script set filetype=lua]])
+filetype.add({
+	  extension = {
+		    script = "lua",
+		    gui_script = "lua",
+		    render_script = "lua",
+		    editor_script = "lua",
+	  },
+})
+
+---@diagnostic disable: missing-fields, unresolved-require
 
 cmd([[
 filetype indent plugin on
@@ -122,16 +139,44 @@ cmd([[ autocmd BufNewFile,BufRead *.html set filetype=htmldjango ]])
 cmd([[
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 ]])
+
 -- Подсвечивает на доли секунды скопированную часть текста
-exec(
-	[[
-augroup YankHighlight
-autocmd!
-autocmd TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=700}
-augroup end
-]],
-	false
-)
+vim.api.nvim_create_autocmd("TextYankPost", {
+	desc = "Highlight when yanking text",
+	group = vim.api.nvim_create_augroup("YankHighlight", { clear = true }),
+	callback = function()
+		vim.hl.on_yank({ higroup = "IncSearch", timeout = 700 })
+	end,
+})
+
+-- Принудительное окрашивание кастомных расширений в окне превью Telescope
+vim.api.nvim_create_autocmd("BufWinEnter", {
+	pattern = "*",
+	callback = function(args)
+		-- Проверяем, что этот буфер открыт внутри превью Telescope
+		if vim.bo[args.buf].filetype == "TelescopePreview" or vim.b[args.buf].telescope_previewer then
+			return
+		end
+
+		-- Получаем расширение файла
+		local ext = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(args.buf), ":e")
+		local defold_extensions = {
+			script = "lua",
+			gui_script = "lua",
+			render_script = "lua",
+			editor_script = "lua",
+		}
+
+		-- Если это наше кастомное расширение, принудительно включаем lua
+		if defold_extensions[ext] then
+			vim.api.nvim_set_option_value("filetype", "lua", { buf = args.buf })
+			-- Запускаем синтаксический анализатор Tree-sitter на лету
+			pcall(vim.treesitter.start, args.buf, "lua")
+		end
+	end,
+})
+
+
 
 -- Bootstrap lazy.nvim
 local lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -155,10 +200,11 @@ require("lazy").setup({
 	spec = {
 		-- import your plugins
 		{ import = "plugins" },
+		{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
 	},
 	-- Configure any other settings here. See the documentation for more details.
 	-- colorscheme that will be used when installing plugins.
-	install = { colorscheme = { "iceberg" } },
+	-- install = { colorscheme = { "iceberg" } },
 	-- automatically check for plugin updates
 	checker = { enabled = true },
 })
@@ -218,7 +264,7 @@ require("bufferline").setup({
 		offsets = {
 			{
 				filetype = "neo-tree",
-				text = "󰥨 File Explorer",
+				text = "   File Explorer",
 				separator = true,
 				highlight = "Directory",
 				text_align = "left",
@@ -226,10 +272,6 @@ require("bufferline").setup({
 		},
 	},
 })
-
-require("telescope").load_extension("fzf")
--- require('telescope').load_extension('media_files')
--- New line in telescope previw
 
 -- Optional, you don't have to run setup.
 require("transparent").setup({
@@ -273,9 +315,6 @@ require("transparent").setup({
 })
 
 require("nvim-web-devicons").setup({
-	-- your personal icons can go here (to override)
-	-- you can specify color or cterm_color instead of specifying both of them
-	-- DevIcon will be appended to `name`
 	override = {
 		zsh = {
 			icon = "",
@@ -284,22 +323,10 @@ require("nvim-web-devicons").setup({
 			name = "Zsh",
 		},
 	},
-	-- globally enable different highlight colors per icon (default to true)
-	-- if set to false all icons will have the default icon's color
 	color_icons = true,
-	-- globally enable default icons (default to false)
-	-- will get overriden by `get_icons` option
 	default = true,
-	-- globally enable "strict" selection of icons - icon will be looked up in
-	-- different tables, first by filename, and if not found by extension; this
-	-- prevents cases when file doesn't have any extension but still gets some icon
-	-- because its name happened to match some extension (default to false)
 	strict = true,
-	-- set the light or dark variant manually, instead of relying on `background`
-	-- (default to nil)
 	variant = "light|dark",
-	-- same as `override` but specifically for overrides by filename
-	-- takes effect when `strict` is true
 	override_by_filename = {
 		[".gitignore"] = {
 			icon = "",
@@ -307,8 +334,6 @@ require("nvim-web-devicons").setup({
 			name = "Gitignore",
 		},
 	},
-	-- same as `override` but specifically for overrides by extension
-	-- takes effect when `strict` is true
 	override_by_extension = {
 		["log"] = {
 			icon = "",
@@ -316,8 +341,6 @@ require("nvim-web-devicons").setup({
 			name = "Log",
 		},
 	},
-	-- same as `override` but specifically for operating system
-	-- takes effect when `strict` is true
 	override_by_operating_system = {
 		["apple"] = {
 			icon = "",
@@ -339,17 +362,17 @@ require("conform").setup({
 		-- Conform will run the first available formatter
 		-- javascript = { "prettierd", "prettier", stop_after_first = true },
 		--javascript = { "prettier", "eslint" },
-		typescript = { "prettier"},
+		typescript = { "prettier" },
 		--javascriptreact = { "prettier", "eslint" },
 		typescriptreact = { "prettier" },
 		css = { "prettier" },
-    scss = { "prettier" },
-    html = { "prettier" },
+		scss = { "prettier" },
+		html = { "prettier" },
 		json = { "prettier" },
 		yaml = { "prettier" },
 		markdown = { "prettier" },
 		graphql = { "prettier" },
-		lua = { "stylua" },
+		--lua = { "stylua" },
 	},
 })
 
@@ -390,7 +413,7 @@ end
 remap("i", "<cr>", "v:lua.MUtils.CR()", { expr = true, noremap = true })
 
 MUtils.BS = function()
-	if fn.pumvisible() ~= 0 and vim.fn.complete_info({ "mode" }).mode == "eval" then
+	if fn.pumvisible() ~= 0 and fn.complete_info({ "mode" }).mode == "eval" then
 		return npairs.esc("<c-e>") .. npairs.autopairs_bs()
 	else
 		return npairs.autopairs_bs()
@@ -398,8 +421,6 @@ MUtils.BS = function()
 end
 remap("i", "<bs>", "v:lua.MUtils.BS()", { expr = true, noremap = true })
 --
-
-require("lazy").setup({ { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" } })
 
 require("nvim-highlight-colors").setup({})
 

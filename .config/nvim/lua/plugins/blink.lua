@@ -26,20 +26,47 @@ return {
     --
     -- See :h blink-cmp-config-keymap for defining your own keymap
     keymap = { preset = 'super-tab' },
-
-    appearance = {
-      -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-      -- Adjusts spacing to ensure icons are aligned
-      nerd_font_variant = 'mono'
-    },
+  
+    -- appearance = {
+    --   -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+    --   -- Adjusts spacing to ensure icons are aligned
+    --   nerd_font_variant = 'mono',
+    --   appearance = {
+    --     use_nvim_cmp_as_default = true,  -- использовать стиль nvim-cmp
+    --   },
+    -- },
 
     -- (Default) Only show the documentation popup when manually triggered
     completion = {
       list = { selection = { preselect = function(ctx) return vim.bo.filetype ~= 'markdown' end } },
       menu = {
+         -- Высота меню в строках
+        max_height = 20,
+        -- Минимальная высота
+        -- min_height = 5,
+        -- Рисовать границу
+        border = "none",
+        -- Прокрутка
+        scrollbar = true,
+        -- Позиция
+        direction_priority = { "s", "n" },
         -- draw = {
         --   columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } }
         -- }
+
+        winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
+        draw = {
+          columns = {
+            { "kind_icon" },
+            { "label", "label_description" },
+          },
+          components = {
+            kind_icon = {
+              ellipsis = false,
+              width = { fill = false, max = 2 },
+            },
+          },
+        },
       },
       ghost_text = {
         enabled = true
