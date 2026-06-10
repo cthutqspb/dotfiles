@@ -1,0 +1,183 @@
+return {
+  {
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+    },
+    config = function()
+      -- 1. Инициализируем Mason
+      require("mason").setup()
+      
+      -- 2. Отключаем всплывающие сообщения от серверов
+      vim.lsp.handlers["window/showMessage"] = function() end
+      vim.lsp.handlers["window/showMessageRequest"] = function() end
+      vim.lsp.handlers["window/logMessage"] = function() end
+      vim.lsp.log.set_level(vim.log.levels.WARN)
+
+      -- 3. Общие возможности (capabilities) для серверов
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
+
+      -- 4. Инициализация mason-lspconfig
+      require("mason-lspconfig").setup({
+        ensure_installed = {
+          'lua_ls', 'pyright', 'ts_ls', "cssls", "eslint", 
+          "html", "jsonls", "tailwindcss", "bashls", 'rust_analyzer', 'clangd',
+        },
+        automatic_installation = true,
+        handlers = {
+          -- Дефолтный хэндлер для всех обычных серверов
+          function(server_name)
+            -- Намертво блокируем устаревший emmylua_ls, если он попытается пролезть
+            if server_name == "emmylua_ls" or server_name == "lua_ls" then return end
+            
+            require("lspconfig")[server_name].setup({
+              capabilities = capabilities,
+            })
+          end,
+
+          -- ЖЕСТКАЯ СВЯЗКА LUA_LS С DEFOLD.NVIM
+          ["lua_ls"] = function()
+            -- Безопасно извлекаем то, что плагин defold.nvim подготовил внутри lspconfig
+            local lspconfig = require("lspconfig")
+            local defold_settings = {}
+            
+            if lspconfig.lua_ls and lspconfig.lua_ls.document_config then
+              local default_config = lspconfig.lua_ls.document_config.default_config
+              if default_config and default_config.settings then
+                defold_settings = default_config.settings
+              end
+            end
+
+            -- Объединяем настройки Defold и ваши правила линтера
+            local final_settings = vim.tbl_deep_extend("force", defold_settings, {
+              Lua = {
+                runtime = { 
+                  version = "Lua 5.1",
+                  path = { '?.lua', '?/init.lua' }
+                },
+                workspace = {
+                  library = vim.api.nvim_get_runtime_file("", true),
+                  checkThirdParty = false,
+                },
+                diagnostics = {
+                  -- Глушим варнинги полей (.zones) и устаревшие док-имена
+                  disable = { "protected-access", "undefined-doc-name", "undefined-field" },
+                  -- Разрешаем глобальные переменные движка Defold
+                  globals = {
+                    "go", "gui", "msg", "url", "sys", "resource", "sound", "sprite",
+                    "timer", "vmath", "window", "collectionfactory", "factory",
+                    "particlefx", "render", "tilemap", "json", "html5", "http",
+                    "socket", "on_message", "on_input", "update", "init", "final", "hash"
+                  },
+                },
+                telemetry = { enable = false },
+                hint = { enable = true },
+              },
+            })
+
+            -- Каноничный запуск сервера через lspconfig
+            lspconfig.lua_ls.setup({
+              capabilities = capabilities,
+              settings = final_settings,
+            })
+          end,
+        }
+      })
+    end,
+  },
+}
+
+
+
+-- {
+  --   "neovim/nvim-lspconfig",
+  --   dependencies = {
+  --     "williamboman/mason.nvim",
+  --     "williamboman/mason-lspconfig.nvim",
+  --   },
+  --   config = function()
+  --     -- 1. Сначала инициализируем Mason
+  --     require("mason").setup()
+  --     require("mason-lspconfig").setup({
+  --       ensure_installed = {
+  --         'lua_ls',
+  --         'pyright',
+  --         'ts_ls',
+  --         "cssls",
+  --         "eslint",
+  --         "html",
+  --         "jsonls",
+  --         "tailwindcss",
+  --         "bashls",
+  --         'rust_analyzer',
+  --         'clangd',
+  --       },
+  --       automatic_installation = true,
+  --     })
+  --
+  --     -- 2. Отключаем всплывающие сообщения от серверов
+  --     vim.lsp.handlers["window/showMessage"] = function() end
+  --     vim.lsp.handlers["window/showMessageRequest"] = function() end
+  --     vim.lsp.handlers["window/logMessage"] = function() end
+  --     
+  --     -- Уровень логов
+  --     vim.lsp.log.set_level(vim.log.levels.WARN)
+  --
+  --     -- 3. Общий on_attach
+  --     local on_attach = function(client, bufnr)
+  --       client.server_capabilities.documentFormattingProvider = false
+  --       client.server_capabilities.documentRangeFormattingProvider = false
+  --       client.server_capabilities.workDoneProgress = false
+  --     end
+  --
+  --     local lspconfig = require("lspconfig")
+  --
+  --     -- 4. Настройка lua_ls для Defold
+  --     lspconfig.lua_ls.setup({
+  --       on_attach = on_attach,
+  --       settings = {
+  --         Lua = {
+  --           runtime = { version = "Lua 5.1" },
+  --           workspace = {
+  --             library = {
+  --               vim.fn.expand("$VIMRUNTIME/lua"),
+  --               vim.api.nvim_get_runtime_file("", true),
+  --               -- 🎯 ТОЧНЫЙ АДРЕС ТИПОВ: Указываем подпапку, где лежат Си-чертежи hash и vector3
+  --               vim.fn.getcwd() .. "/.internal/lua-annotations",
+  --             },
+  --             checkThirdParty = false,
+  --           },
+  --           diagnostics = {
+  --             -- 🎯 ВЫЖИГАЕМ ЛОЖНЫЕ ВАРНИНГИ: protected-access и придирки к док-аннотациям в ---@param
+  --             disable = { "protected-access", "undefined-doc-name" },
+  --             globals = {
+  --               "go", "gui", "msg", "url", "sys", "resource", "sound", "sprite",
+  --               "timer", "vmath", "window", "collectionfactory", "factory",
+  --               "particlefx", "render", "tilemap", "json", "html5", "http",
+  --               "socket", "on_message", "on_input", "update", "init", "final", "hash"
+  --             },
+  --           },
+  --           hint = { enable = true },
+  --         },
+  --       },
+  --     })
+  --
+  --     -- 5. Список остальных серверов для быстрой настройки
+  --     local servers = {
+  --       "pyright", "ts_ls", "cssls", "eslint", "html",
+  --       "jsonls", "tailwindcss", "bashls", "rust_analyzer", "clangd"
+  --     }
+  --
+  --     for _, lsp in ipairs(servers) do
+  --       -- Проверка на случай, если имя сервера изменится (как tsserver -> ts_ls)
+  --       if lspconfig[lsp] then
+  --         lspconfig[lsp].setup({
+  --           on_attach = on_attach,
+  --         })
+  --       end
+  --     end
+  --   end,
+  -- }, 
+

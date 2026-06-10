@@ -1,6 +1,7 @@
 return {
 	"nvim-telescope/telescope.nvim",
-	tag = "0.1.8",
+	-- 🧱 ФИКС: Убрали 'tag = "0.1.8"', чтобы Lazy подтянул свежую ветку master, 
+	-- в которой исправлен краш из-за обновления nvim-treesitter.
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
@@ -44,4 +45,5 @@ return {
 		require("telescope").load_extension("fzf")
 	end,
 }
+
 

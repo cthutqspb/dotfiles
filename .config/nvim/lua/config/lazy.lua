@@ -196,20 +196,40 @@ end
 opt.rtp:prepend(lazypath)
 
 -- Setup lazy.nvim
-require("lazy").setup({
-	spec = {
-		-- import your plugins
-		{ import = "plugins" },
-		{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
-	},
+--require("lazy").setup({
+--	spec = {
+--		-- import your plugins
+--		{ import = "plugins" },
+--		{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+--	},
 	-- Configure any other settings here. See the documentation for more details.
 	-- colorscheme that will be used when installing plugins.
 	-- install = { colorscheme = { "iceberg" } },
 	-- automatically check for plugin updates
-	checker = { enabled = true },
+--	checker = { enabled = true },
+--})
+
+-- require("luarocks").setup({ rocks = { "fzy" } })
+
+require("lazy").setup({
+  spec = {
+    -- Импортируем ваши плагины из папки lua/plugins/
+    { import = "plugins" },
+    
+    -- Чистый Treesitter
+    { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+  },
+
+  -- 🧱 ЖЕЛЕЗОБЕТОННЫЙ СИСТЕМНЫЙ ФИКС: 
+  -- Запрещаем lazy.nvim скачивать манифесты с упавшего luarocks.org
+  rocks = {
+    enabled = false,
+    hererocks = false,
+  },
+
+  checker = { enabled = true },
 })
 
-require("luarocks").setup({ rocks = { "fzy" } })
 
 require("lualine").setup({
 	options = {
